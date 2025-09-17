@@ -20,7 +20,41 @@ Verification Commands
 bash
 # Verify Docker installation
 docker --version
+
+C:\Users\Pranvi Kankane\OneDrive\Desktop\Devops\Docker-dockercomposed-Assignment\Microservervice-Checkout\Microservices-Task-170925\Microservices>docker version
+Client:
+ Version:           28.3.2
+ API version:       1.51
+ Go version:        go1.24.5
+ Git commit:        578ccf6
+ Built:             Wed Jul  9 16:12:31 2025
+ OS/Arch:           windows/amd64
+ Context:           desktop-linux
+
+Server: Docker Desktop 4.43.2 (199162)
+ Engine:
+  Version:          28.3.2
+  API version:      1.51 (minimum version 1.24)
+  Go version:       go1.24.5
+  Git commit:       e77ff99
+  Built:            Wed Jul  9 16:13:55 2025
+  OS/Arch:          linux/amd64
+  Experimental:     false
+ containerd:
+  Version:          1.7.27
+  GitCommit:        05044ec0a9a75232cad458027ca83437aae3f4da
+ runc:
+  Version:          1.2.5
+  GitCommit:        v1.2.5-0-g59923ef
+ docker-init:
+  Version:          0.19.0
+  GitCommit:        de40ad0
+
 docker-compose --version
+
+C:\Users\Pranvi Kankane\OneDrive\Desktop\Devops\Docker-dockercomposed-Assignment\Microservervice-Checkout\Microservices-Task-170925\Microservices>docker-compose --version
+Docker Compose version v2.38.2-desktop.1
+
 
 # Check Docker daemon status
 docker info
@@ -29,241 +63,180 @@ microservices-task/
 ├── user-service/
 │   ├── Dockerfile
 │   ├── package.json
-│   └── server.js
+│   └── app.js
 ├── product-service/
 │   ├── Dockerfile
 │   ├── package.json
-│   └── server.js
+│   └── app.js
 ├── gateway-service/
 │   ├── Dockerfile
 │   ├── package.json
-│   └── server.js
+│   └── app.js
 ├── docker-compose.yml
 └── README.md
+https://github.com/vijaykankane/Microservices-Task-170925
+
+
 Setup Instructions
 1. Clone Repository
 bash
-git clone https://github.com/mohanDevOps-arch/Microservices-Task.git
+git clone https://github.com/vijaykankane/Microservices-Task-170925.git
 cd Microservices-Task
 2. Build and Start Services
 bash
 # Build all services and start in detached mode
 docker-compose up -d --build
 
+[+] Running 6/6
+ ✔ user-service                             Built                                                                                     0.0s 
+ ✔ gateway-service                          Built                                                                                     0.0s 
+ ✔ product-service                          Built                                                                                     0.0s 
+ ✔ Container microservices-user-service     Healthy                                                                                   7.2s 
+ ✔ Container microservices-product-service  Healthy                                                                                   7.2s 
+ ✔ Container microservices-gateway-service  Started                                                                                   6.3s
+
 # View running containers
 docker-compose ps
 
-# View logs from all services
+
+C:\Users\Pranvi Kankane\OneDrive\Desktop\Devops\Docker-dockercomposed-Assignment\Microservervice-Checkout\Microservices-Task-170925\Microservices>docker compose ps
+time="2025-09-17T22:15:52+05:30" level=warning msg="C:\\Users\\Pranvi Kankane\\OneDrive\\Desktop\\Devops\\Docker-dockercomposed-Assignment\\Microservervice-Checkout\\Microservices-Task-170925\\Microservices\\docker-compose.yml: the attribute `version` is obsolete, it will be ignored, please remove it to avoid potential confusion"
+NAME                            IMAGE                           COMMAND                  SERVICE           CREATED       STATUS                 PORTS
+microservices-gateway-service   microservices-gateway-service   "dumb-init -- node a…"   gateway-service   3 hours ago   Up 3 hours (healthy)   0.0.0.0:3003->3003/tcp, [::]:3003->3003/tcp
+microservices-product-service   microservices-product-service   "dumb-init -- node a…"   product-service   3 hours ago   Up 3 hours (healthy)   0.0.0.0:3001->3001/tcp, [::]:3001->3001/tcp
+microservices-user-service      microservices-user-service      "dumb-init -- node a…"   user-service      3 hours ago   Up 3 hours (healthy)   0.0.0.0:3000->3000/tcp, [::]:3000->3000/tcp
+
+
 docker-compose logs -f
 3. Verify Service Health
-bash
 # Check health status
-docker-compose ps
 
-# Individual service connectivity checks
-curl http://localhost:3000/  # User Service
-curl http://localhost:3001/  # Product Service
-curl http://localhost:3003/  # Gateway Service
-
-# Or use wget for testing
-wget --spider http://localhost:3000/
-wget --spider http://localhost:3001/
-wget --spider http://localhost:3003/
-Testing Each Service
-User Service (Port 3000)
+C:\>curl http://localhost:3000/health
+{"status":"User Service is healthy"}
+C:\>curl http://localhost:3001/health
+{"status":"Product Service is healthy"}
+C:\>curl http://localhost:3003/health
+{"status":"Gateway Service is healthy"}
+C:\>
 bash
-# Basic connectivity check
-curl -X GET http://localhost:3000/
 
-# Test available endpoints (check service documentation for actual endpoints)
-# Examples based on typical user service endpoints:
-curl -X GET http://localhost:3000/users
-curl -X GET http://localhost:3000/api/users
+
+
+
+C:\>curl -X GET http://localhost:3000/users
+[{"id":1,"name":"John Doe"},{"id":2,"name":"Jane Smith"}]
+C:\>
+
+
+C:\>curl -X GET http://localhost:3003/api/users
+[{"id":1,"name":"John Doe"},{"id":2,"name":"Jane Smith"}]
+C:\>
+
 Product Service (Port 3001)
 bash
-# Basic connectivity check
-curl -X GET http://localhost:3001/
+
 
 # Test available endpoints (check service documentation for actual endpoints)
 # Examples based on typical product service endpoints:
-curl -X GET http://localhost:3001/products
-curl -X GET http://localhost:3001/api/products
+
+C:\>curl -X GET http://localhost:3001/products
+[{"id":1,"name":"Laptop","price":999},{"id":2,"name":"Phone","price":699}]
+C:\>
+
+C:\>curl -X GET http://localhost:3003/api/products
+[{"id":1,"name":"Laptop","price":999},{"id":2,"name":"Phone","price":699}]
+C:\>
+
 Gateway Service (Port 3003)
 bash
-# Basic connectivity check
-curl -X GET http://localhost:3003/
 
 # Test gateway routing (check service documentation for actual endpoints)
 # Examples based on typical gateway patterns:
-curl -X GET http://localhost:3003/api/users
-curl -X GET http://localhost:3003/api/products
-Load Testing (Optional)
-bash
-# Install apache bench for load testing
-# Ubuntu/Debian: sudo apt install apache2-utils
-# macOS: brew install apache2-utils
 
-# Test gateway under load (use root endpoint)
-ab -n 1000 -c 10 http://localhost:3003/
-Service Communication
+C:\>curl -X GET http://localhost:3003/api/users
+[{"id":1,"name":"John Doe"},{"id":2,"name":"Jane Smith"}]
+
+
+C:\>curl -X GET http://localhost:3003/api/products
+[{"id":1,"name":"Laptop","price":999},{"id":2,"name":"Phone","price":699}]
+C:\>
+
+
+For Service Communication
 Services communicate through the internal Docker network microservices-network. The gateway service uses these internal URLs:
 
 User Service: http://user-service:3000
 Product Service: http://product-service:3001
-Management Commands
-Development Operations
-bash
-# View real-time logs
-docker-compose logs -f [service-name]
 
-# Restart specific service
-docker-compose restart user-service
-
-# Rebuild specific service
-docker-compose up -d --build user-service
-
-# Scale services (if stateless)
-docker-compose up -d --scale user-service=2
-
-# Execute commands in running container
-docker-compose exec user-service sh
-Production Operations
-bash
-# Start services with production settings
-docker-compose -f docker-compose.yml up -d
-
-# Monitor resource usage
-docker stats
-
-# Create backup of volumes
-docker run --rm -v microservices_user-data:/data -v $(pwd):/backup alpine tar czf /backup/user-data-backup.tar.gz -C /data .
-Troubleshooting Guide
-Common Issues
-Services Not Starting
-bash
-# Check container logs
-docker-compose logs [service-name]
-
-# Verify Docker resources
-docker system df
-docker system prune  # Clean up if needed
-
-# Check port conflicts
-netstat -tulpn | grep :3000
-Network Connectivity Issues
-bash
 # Inspect network configuration
-docker network ls
-docker network inspect microservices-network
 
-# Test service-to-service connectivity
-docker-compose exec gateway-service ping user-service
-docker-compose exec gateway-service nslookup user-service
-Health Check Failures
-bash
-# Manual connectivity check
-docker-compose exec user-service curl localhost:3000/
+C:\>docker network ls
+NETWORK ID     NAME                    DRIVER    SCOPE
+33460339a37c   bridge                  bridge    local
+53b7b87cb328   host                    host      local
+9af0d8522c1d   microservices-network   bridge    local
+fa7d77a44c69   none                    null      local
+d17aab256688   vkdon2                  bridge    local
 
-# Check if service is running and listening on correct port
-docker-compose exec user-service ps aux
-docker-compose exec user-service netstat -tulpn
-Resource Constraints
-bash
-# Monitor resource usage
-docker stats --no-stream
 
-# Adjust resource limits in docker-compose.yml
-# Increase memory limits if containers are being killed
-Performance Tuning
-Memory Optimization
-Adjust deploy.resources.limits in docker-compose.yml
-Monitor memory usage with docker stats
-Consider using Alpine-based images for smaller footprint
-Network Optimization
-Use internal service names for inter-service communication
-Implement connection pooling in applications
-Consider using traefik or nginx for load balancing
-Production Considerations
-Security Hardening
-Services run as non-root users (nodeuser:1001)
-Regular security updates in Alpine base images
-Network isolation with custom bridge network
-Consider implementing service mesh for advanced security
-Monitoring & Observability
-bash
-# Add monitoring stack
-# Prometheus metrics endpoint: /metrics
-# Health checks: /health
-# Consider adding ELK stack or Grafana
-
-# Log aggregation
-docker-compose logs --since="1h" > app-logs.txt
-Scaling Strategies
-Use Docker Swarm or Kubernetes for production
-Implement horizontal pod autoscaling
-Database connection pooling and caching
-CDN for static assets
-Backup & Recovery
-bash
-# Database backup (if applicable)
-docker-compose exec database-service mysqldump -u root -p database_name > backup.sql
-
-# Volume backup
-docker run --rm -v microservices_user-data:/data -v $(pwd):/backup alpine tar czf /backup/backup.tar.gz -C /data .
-Environment Variables
-Available Configuration
-NODE_ENV: Application environment (development/production)
-SERVICE_NAME: Service identifier for logging
-SERVICE_PORT: Port configuration
-USER_SERVICE_URL: Gateway → User service URL
-PRODUCT_SERVICE_URL: Gateway → Product service URL
-Custom Configuration
-bash
-# Create .env file for environment-specific settings
-echo "NODE_ENV=development" > .env
-echo "DEBUG=true" >> .env
-
-# Use with docker-compose
-docker-compose --env-file .env up -d
-Screenshots Reference
-When documenting your deployment, include screenshots of:
-
-Terminal showing successful build:
-bash
-   docker-compose up -d --build
-Docker Desktop showing running containers:
-All three services in "Running" state
-Port mappings visible
-Service connectivity checks:
-bash
-   curl localhost:3000/
-   curl localhost:3001/  
-   curl localhost:3003/
-Docker Compose PS output:
-bash
-   docker-compose ps
-Contributing
-Development Workflow
-Create feature branch
-Make changes to service code
-Test locally with Docker Compose
-Update documentation if needed
-Submit pull request
-Code Quality
-Follow Node.js best practices
-Implement proper error handling
-Add comprehensive logging
-Write unit tests for business logic
-Support & Resources
-Official Documentation
-Docker Documentation
-Docker Compose Reference
-Node.js Docker Best Practices
-Performance Monitoring
-Docker Stats API
-Node.js Performance Monitoring
-Project Status: Production Ready
-Last Updated: September 2025
-Docker Version: 20.10+
-Node.js Version: 18+
-
+C:\>docker network inspect microservices-network
+[
+    {
+        "Name": "microservices-network",
+        "Id": "9af0d8522c1d5f7a27c4f7d25c511c96232ee4ff475ff11b75bb88a7c3f6ac36",
+        "Created": "2025-09-17T12:54:23.467837935Z",
+        "Scope": "local",
+        "Driver": "bridge",
+        "EnableIPv4": true,
+        "EnableIPv6": false,
+        "IPAM": {
+            "Driver": "default",
+            "Options": null,
+            "Config": [
+                {
+                    "Subnet": "172.20.0.0/16"
+                }
+            ]
+        },
+        "Internal": false,
+        "Attachable": false,
+        "Ingress": false,
+        "ConfigFrom": {
+            "Network": ""
+        },
+        "ConfigOnly": false,
+        "Containers": {
+            "332eae68ce561d0d53574efae6b0c94e7e14e9b652cd4bfef351e1d4f7ed2871": {
+                "Name": "microservices-user-service",
+                "EndpointID": "49d08e693e0799ec06357948f823a3146c1d0007376be025c975e2197b89dbe0",
+                "MacAddress": "96:20:e3:40:8d:10",
+                "IPv4Address": "172.20.0.2/16",
+                "IPv6Address": ""
+            },
+            "e0e61e72fcb2e89f39f79c269675d81e839246aef4d1111b0816e555f848a543": {
+                "Name": "microservices-gateway-service",
+                "EndpointID": "291c8b4393d13f748b0ca4ec43eb2c3d3854fc4cb881799e696142be36efc5ac",
+                "MacAddress": "26:4d:f1:00:a5:2d",
+                "IPv4Address": "172.20.0.4/16",
+                "IPv6Address": ""
+            },
+            "fddca603808382ffafe1cd38736d626b2c149e157718d45d97ddae599f10a53f": {
+                "Name": "microservices-product-service",
+                "EndpointID": "42b78fd5fd3959dde0e0163fcd52afb7fc5e60ed12723f8e1799ba21b5b48978",
+                "MacAddress": "9a:a7:3a:5a:09:ea",
+                "IPv4Address": "172.20.0.3/16",
+                "IPv6Address": ""
+            }
+        },
+        "Options": {
+            "com.docker.network.enable_ipv4": "true",
+            "com.docker.network.enable_ipv6": "false"
+        },
+        "Labels": {
+            "com.docker.compose.config-hash": "e9c13263cc37dfce1a2f2ef93f401a5eb261bec86ac4639e8253ae63cb295257",
+            "com.docker.compose.network": "microservices-network",
+            "com.docker.compose.project": "microservices",
+            "com.docker.compose.version": "2.38.2"
+        }
+    }
+]
